@@ -90,16 +90,6 @@ video/   il grafico animato (MP4, 12 secondi)
 altri/   rapporto, dati usati, didascalia e riepilogo.md
 ```
 
-## Test
-
-```bash
-pip install pytest
-python -m pytest              # 41 test, meno di un secondo, senza rete
-python -m pytest -m slow      # 4 test che disegnano davvero con Chromium e ffmpeg (circa 3 minuti)
-```
-
-I test usano cinque serie reali (in `tests/fixtures/`) e verificano le garanzie del progetto: nessun numero inventato nei testi, le regole di scelta sopra, la rotazione delle copertine, il giro completo di un post.
-
 ## Un bug interessante
 
 Un video uscì fermo dopo un "Salva e rigenera". Il file aveva **due blocchi `moov`** e migliaia di errori di decodifica: due richieste ravvicinate alla redazione (un minuto di attesa senza segnali invita a ricliccare) scrivevano lo stesso file insieme. La correzione ha tre parti: il video si scrive in un file provvisorio e si sostituisce in modo atomico, la redazione esegue una rigenerazione alla volta, e il pulsante si disabilita. `test_due_rigenerazioni_insieme_non_rovinano_il_video` riproduce il guasto con due processi.
